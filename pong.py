@@ -1,6 +1,7 @@
-import pygame
-import sys
 import random
+import sys
+
+import pygame
 
 # Game constants
 WIDTH, HEIGHT = 800, 600
@@ -35,9 +36,9 @@ def reset_ball(ball_rect, direction=None):
         vy = 1.0 * (1 if vy >= 0 else -1)
 
     # Horizontal velocity based on direction
-    if direction == 'left':
+    if direction == "left":
         vx = -BALL_SPEED
-    elif direction == 'right':
+    elif direction == "right":
         vx = BALL_SPEED
     else:
         vx = BALL_SPEED * (1 if random.random() < 0.5 else -1)
@@ -61,8 +62,15 @@ def main():
 
     # Game objects
     player = pygame.Rect(30, (HEIGHT - PADDLE_HEIGHT) // 2, PADDLE_WIDTH, PADDLE_HEIGHT)
-    ai = pygame.Rect(WIDTH - 30 - PADDLE_WIDTH, (HEIGHT - PADDLE_HEIGHT) // 2, PADDLE_WIDTH, PADDLE_HEIGHT)
-    ball = pygame.Rect(WIDTH // 2 - BALL_SIZE // 2, HEIGHT // 2 - BALL_SIZE // 2, BALL_SIZE, BALL_SIZE)
+    ai = pygame.Rect(
+        WIDTH - 30 - PADDLE_WIDTH,
+        (HEIGHT - PADDLE_HEIGHT) // 2,
+        PADDLE_WIDTH,
+        PADDLE_HEIGHT,
+    )
+    ball = pygame.Rect(
+        WIDTH // 2 - BALL_SIZE // 2, HEIGHT // 2 - BALL_SIZE // 2, BALL_SIZE, BALL_SIZE
+    )
 
     ball_vel = reset_ball(ball)
 
@@ -114,7 +122,9 @@ def main():
         if ball.colliderect(player) and ball_vel[0] < 0:
             # Reflect and add spin based on impact position
             offset = (ball.centery - player.centery) / (PADDLE_HEIGHT / 2)
-            ball_vel[0] = -ball_vel[0] + (BALL_SPEED_INCREMENT)  # ensure it doesn't slow down
+            ball_vel[0] = -ball_vel[0] + (
+                BALL_SPEED_INCREMENT
+            )  # ensure it doesn't slow down
             ball_vel[1] += offset * 2.5
             # Cap vertical speed
             ball_vel[1] = clamp(ball_vel[1], -MAX_BALL_VY, MAX_BALL_VY)
@@ -128,11 +138,11 @@ def main():
         if ball.right < 0:
             # AI scores
             ai_score += 1
-            ball_vel = reset_ball(ball, direction='right')
+            ball_vel = reset_ball(ball, direction="right")
         elif ball.left > WIDTH:
             # Player scores
             player_score += 1
-            ball_vel = reset_ball(ball, direction='left')
+            ball_vel = reset_ball(ball, direction="left")
 
         # Draw
         screen.fill(BLACK)
